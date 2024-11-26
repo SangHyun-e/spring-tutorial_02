@@ -3,6 +3,7 @@ package com.example.demo.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -87,12 +88,12 @@ public class UserJdbcApiDao {
         }
     }
 
-    public User save(String name, Integer age, String job, String specialty) throws SQLException {
-        Connection connection = null;           // 1
+    public User save(/* final Connection connection, */String name, Integer age, String job, String specialty) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);           // 1
         PreparedStatement statement = null;     // 2
         ResultSet resultSet = null;             // 3
         try {
-            connection = dataSource.getConnection();    // 1
+//            connection = dataSource.getConnection();    // 1
             // (A) INSERT USER
             statement = connection.prepareStatement(    // (A)-2:Statement
                     "INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES (?, ?, ?, ?, ?)"
